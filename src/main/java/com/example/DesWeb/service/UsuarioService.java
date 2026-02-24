@@ -29,12 +29,12 @@ public class UsuarioService {
             throw new IllegalArgumentException("El nombre de usuario ya existe");
         }
 
-        Usuario user = new Usuario(
-            userReq.getNombre(),
-            userReq.getApellido(),
-            userReq.getUser(),
-            encoder.encode(userReq.getPassword())
-        );
+        Usuario user = Usuario.builder()
+        .nombre(userReq.getNombre())
+        .apellido(userReq.getApellido())
+        .user(userReq.getUser())
+        .password(encoder.encode(userReq.getPassword()))
+        .build();
 
         Usuario Userguardado = userRepo.save(user);
         return new UsuarioResponse(
