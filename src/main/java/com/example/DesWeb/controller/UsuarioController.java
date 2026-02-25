@@ -44,8 +44,9 @@ public class UsuarioController {
 
       //4 usuario con parametros (SIN AUTH)
       @GetMapping("/params")
-      public NombreCompletoResponse params (@RequestParam String nombre,
-                                            @RequestParam String apellido){
-        return new NombreCompletoResponse(nombre + " " + apellido);
+      public NombreCompletoResponse params 
+                                  (@RequestParam String nombre,
+                                  @RequestParam String apellido){
+        return userService.buscarNombreCompleto(nombre, apellido);
       }
 }

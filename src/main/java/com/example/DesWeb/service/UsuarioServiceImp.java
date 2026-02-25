@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.DesWeb.DTOs.CreateUsuarioRequest;
+import com.example.DesWeb.DTOs.NombreCompletoResponse;
 import com.example.DesWeb.DTOs.UsuarioResponse;
 import com.example.DesWeb.model.Usuario;
 import com.example.DesWeb.repository.UsuarioRepository;
@@ -23,6 +24,7 @@ public class UsuarioServiceImp implements UsuarioService {
         this.encoder = encoder;
     }
 
+    //Crear usuario con validaciones
     @Override
     public UsuarioResponse crear(CreateUsuarioRequest userReq) {
 
@@ -30,7 +32,6 @@ public class UsuarioServiceImp implements UsuarioService {
                 || userReq.getPassword() == null || userReq.getPassword().isBlank()) {
             throw new IllegalArgumentException("El usuario y la contraseña son obligatorios");
         }
-
         if (userRepo.existsByUser(userReq.getUser())) {
             throw new IllegalArgumentException("El nombre de usuario ya existe");
         }
@@ -41,7 +42,6 @@ public class UsuarioServiceImp implements UsuarioService {
                 .user(userReq.getUser())
                 .password(encoder.encode(userReq.getPassword()))
                 .build();
-
         Usuario userGuardado = userRepo.save(user);
 
         return new UsuarioResponse(
@@ -51,6 +51,10 @@ public class UsuarioServiceImp implements UsuarioService {
         );
     }
     
+
+
+//Listar usuarios sin contraseña
+
     @Override
     public List<UsuarioResponse> listar() {
         return userRepo.findAll()
@@ -59,14 +63,32 @@ public class UsuarioServiceImp implements UsuarioService {
                 .toList();
     }
 
+
+//Buscar usuario por nombre y apellido EN LA URL
+    @Override
+    public NombreCompletoResponse buscarNombreCompleto(String nombre, String apellido) {
+        Usuario u = userRepo.findByNombreIgnoreCaseAndApellidoIgnoreCase(nombre, apellido)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND, "Usuario No encontrado: " + nombre + " " + apellido
+                        )
+                );
+
+        return new NombreCompletoResponse(
+                            u.getNombre() + " " + u.getApellido()
+                        );
+         
+    }
+
+
+//Buscar usuario por ID sin contraseña
     @Override
     public UsuarioResponse buscarPorId(Long id) {
         Usuario u = userRepo.findById(id)
                 .orElseThrow(() ->
         new ResponseStatusException(
-            HttpStatus.NOT_FOUND, "Usuario No encntrado" + id
-        )
-);
+            HttpStatus.NOT_FOUND, "Usuario No encntrado" + id)
+        );
 
         return new UsuarioResponse(
             u.getId(),

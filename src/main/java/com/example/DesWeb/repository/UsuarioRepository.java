@@ -8,4 +8,6 @@ import com.example.DesWeb.model.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     boolean existsByUser(String user);
     Optional<Usuario> findByUser(String user);
+
+Optional<Usuario> findByNombreIgnoreCaseAndApellidoIgnoreCase(String nombre, String apellido);
 }
