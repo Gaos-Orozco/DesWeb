@@ -25,7 +25,7 @@ public class SecurityConfig {
 
                //con auth
                .requestMatchers(HttpMethod.POST,"/api/usuarios").authenticated()
-               .requestMatchers(HttpMethod.GET,"/api/usuarios/*").authenticated()
+               .requestMatchers(HttpMethod.GET,"/api/usuarios/**").authenticated()
 
                .anyRequest().denyAll()
            )

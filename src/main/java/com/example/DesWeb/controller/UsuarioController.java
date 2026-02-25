@@ -4,7 +4,6 @@ import com.example.DesWeb.DTOs.CreateUsuarioRequest;
 import com.example.DesWeb.DTOs.UsuarioResponse;
 import com.example.DesWeb.service.UsuarioService;
 import org.springframework.web.bind.annotation.*;
-import com.example.DesWeb.model.Usuario;
 import com.example.DesWeb.DTOs.NombreCompletoResponse;
 import java.util.List;
 
@@ -18,20 +17,20 @@ public class UsuarioController {
     }
 
     //1 Crear usuario (CON AUTH)
-    @PostMapping
+    @PostMapping("/usuarios")
     public UsuarioResponse crearUsuario(@RequestBody CreateUsuarioRequest userReq){
         return userService.crear(userReq);
     }
 
       //2 Obtener todos (SIN AUTH)
       @GetMapping("/usuarios")
-      public List <Usuario> listar(){
+      public List <UsuarioResponse> listarUsuarios(){
         return userService.listar();
       }
 
       //3 Obtener por id (CON AUTH)
       @GetMapping("/usuarios/{id}")
-      public Usuario obtenerPorId(@PathVariable Long id){
+      public UsuarioResponse obtenerPorId(@PathVariable Long id){
         return userService.buscarPorId(id);
       }
 
